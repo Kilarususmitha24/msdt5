@@ -8,7 +8,6 @@ const filePath = path.join(__dirname, "users.json");
 
 app.use(express.json());
 
-// ✅ Helper to safely read users
 function readUsers() {
   try {
     if (!fs.existsSync(filePath)) {
@@ -23,7 +22,6 @@ function readUsers() {
   }
 }
 
-// ✅ Helper to write users
 function writeUsers(users) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(users, null, 2), "utf-8");
@@ -32,13 +30,11 @@ function writeUsers(users) {
   }
 }
 
-// 🟢 GET /users → Return all users
 app.get("/users", (req, res) => {
   const users = readUsers();
   res.json(users);
 });
 
-// 🟢 POST /users → Add a new user
 app.post("/users", (req, res) => {
   const { name, age } = req.body;
 
@@ -56,7 +52,6 @@ app.post("/users", (req, res) => {
   res.status(201).json(newUser);
 });
 
-// 🟢 PUT /users/:id → Update user details by ID
 app.put("/users/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const { name, age } = req.body;
@@ -79,7 +74,6 @@ app.put("/users/:id", (req, res) => {
   res.json(user);
 });
 
-// 🟢 DELETE /users/:id → Delete user by ID
 app.delete("/users/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const users = readUsers();
@@ -94,7 +88,6 @@ app.delete("/users/:id", (req, res) => {
   res.json({ message: "User deleted successfully." });
 });
 
-// ⭐ BONUS: GET /users/search?name=keyword → Case-insensitive name search
 app.get("/users/search", (req, res) => {
   const { name } = req.query;
   if (!name) {
@@ -108,12 +101,10 @@ app.get("/users/search", (req, res) => {
   res.json(results);
 });
 
-// Root endpoint
 app.get("/", (req, res) => {
   res.send("✅ User API is running! Use /users to view data.");
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
